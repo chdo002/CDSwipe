@@ -7,7 +7,7 @@ class CDSwipeView: UIView {
     let screenW = UIScreen.mainScreen().bounds.width
     let screenH = UIScreen.mainScreen().bounds.height
     
-    let scrItemW = UIScreen.mainScreen().bounds.width * 0.4
+    let scrItemW = UIScreen.mainScreen().bounds.width * 0.42
     let scrItemH = UIScreen.mainScreen().bounds.width * 0.6
     
     var backImageView: UIImageView!
@@ -15,7 +15,7 @@ class CDSwipeView: UIView {
     
     
     
-    var images = [UIImageView]()
+    var images = [SwipeItem]()
     
     var selectWindow : CGRect!
     
@@ -29,7 +29,7 @@ class CDSwipeView: UIView {
         
         
         // 底部滚动视图
-        let y = screenH * 2.5 / 4
+        let y = screenH * 2.4 / 4
         
         bottonScrollView = UIScrollView(frame: CGRectMake(0,y, screenW, scrItemH))
         bottonScrollView.backgroundColor = UIColor.clearColor()
@@ -59,10 +59,8 @@ class CDSwipeView: UIView {
         
         
         for en in images.enumerate() {
-            let item = UIImageView(frame: CGRectMake(CGFloat(en.0) * scrItemW, 0, scrItemW, scrItemH))
-                item.contentMode = .ScaleAspectFill
-                item.clipsToBounds = true
-                item.image = en.1
+            let item = SwipeItem(frame: CGRectMake(CGFloat(en.0) * scrItemW, 0, scrItemW, scrItemH))
+                item.itemIma.image = en.1
             bottonScrollView.addSubview(item)
             self.images.append(item)
         }
@@ -88,9 +86,34 @@ class CDSwipeView: UIView {
             currentIndex = index
         }
         UIView.transitionWithView(self.backImageView, duration: 0.4, options: UIViewAnimationOptions.TransitionCrossDissolve, animations: {
-            self.backImageView.image = self.images[index].image!
+            self.backImageView.image = self.images[index].itemIma.image!
             }) { (bol) in
                 
         }
     }
+    
+    class SwipeItem: UIView {
+        
+        var itemIma: UIImageView!
+        
+        override init(frame: CGRect){
+            super.init(frame: frame)
+            backgroundColor = UIColor.clearColor()
+            
+            itemIma = UIImageView(frame: CGRectMake(10, 10, frame.width - 20, frame.height - 20))
+            itemIma.contentMode = .ScaleAspectFill
+            itemIma.layer.shadowColor = UIColor.blackColor().CGColor
+            itemIma.layer.cornerRadius = 15
+            self.itemIma.clipsToBounds = true
+            self.clipsToBounds = true
+            addSubview(itemIma)
+            
+        }
+        
+        
+        required init?(coder aDecoder: NSCoder) {
+            super.init(coder: aDecoder)
+        }
+    }
+    
 }
